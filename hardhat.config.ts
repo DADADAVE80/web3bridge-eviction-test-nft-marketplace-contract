@@ -13,9 +13,6 @@ const {
 
 const config: HardhatUserConfig = {
   solidity: "0.8.24",
-  gasReporter: {
-    gasPrice: 10000000000,
-  },
   networks: {
     hardhat: {
       forking: {
