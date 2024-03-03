@@ -57,7 +57,7 @@ npm install @openzeppelin/contracts
 
 https://mumbai.polygonscan.com/address/0x29B95a3B6fCD43Ed94e5cbf20eFF011fb59e1CD1#code
 
-![](images/mumbai.png)
+![Mumbaiscan deployment](images/mumbai.png)
 
 ## License
 
