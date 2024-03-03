@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: SEE LICENSE IN LICENSE
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.21;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
@@ -25,6 +25,15 @@ contract NFTMarketplace is ERC721URIStorage {
         _setTokenURI(tokenId, _tokenURI);
     }
 
+    function listNFT(uint256 _tokenId, uint256 _price) external {
+        require(
+            ownerOf(_tokenId) == msg.sender,
+            "NFTMarketplace: only owner can list token"
+        );
+        tokenPrices[_tokenId] = _price;
+        tokenListings[_tokenId] = true;
+    }
+
     function buyNFT(uint256 _tokenId) external payable {
         require(
             msg.value >= tokenPrices[_tokenId],
@@ -36,14 +45,5 @@ contract NFTMarketplace is ERC721URIStorage {
 
         safeTransferFrom(seller, buyer, _tokenId);
         payable(seller).transfer(price);
-    }
-
-    function listNFT(uint256 _tokenId, uint256 _price) external {
-        require(
-            ownerOf(_tokenId) == msg.sender,
-            "NFTMarketplace: only owner can list token"
-        );
-        tokenPrices[_tokenId] = _price;
-        tokenListings[_tokenId] = true;
     }
 }
