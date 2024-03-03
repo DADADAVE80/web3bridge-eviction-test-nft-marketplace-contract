@@ -10,6 +10,11 @@ contract NFTMarketplace is ERC721URIStorage {
     mapping(uint256 => uint256) public tokenPrices;
     mapping(uint256 => bool) public tokenListings;
 
+    // Events
+    event MintedNFT(address indexed _to, string _tokenURI, uint256 _price);
+    event ListedNFT(uint256 indexed _tokenId, uint256 _price);
+    event BoughtNFT(uint256 indexed _tokenId, address indexed _buyer);
+
     constructor() ERC721("NFTMarketplace", "NFTM") {
         owner = msg.sender;
     }
@@ -23,6 +28,7 @@ contract NFTMarketplace is ERC721URIStorage {
         tokenPrices[tokenId] = _price;
         _mint(_to, tokenId);
         _setTokenURI(tokenId, _tokenURI);
+        emit MintedNFT(_to, _tokenURI, _price);
     }
 
     function listNFT(uint256 _tokenId, uint256 _price) external {
@@ -32,6 +38,7 @@ contract NFTMarketplace is ERC721URIStorage {
         );
         tokenPrices[_tokenId] = _price;
         tokenListings[_tokenId] = true;
+        emit ListedNFT(_tokenId, _price);
     }
 
     function buyNFT(uint256 _tokenId) external payable {
@@ -45,5 +52,7 @@ contract NFTMarketplace is ERC721URIStorage {
 
         safeTransferFrom(seller, buyer, _tokenId);
         payable(seller).transfer(price);
+        tokenListings[_tokenId] = false;
+        emit BoughtNFT(_tokenId, buyer);
     }
 }
